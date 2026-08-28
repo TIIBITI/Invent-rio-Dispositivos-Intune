@@ -1,0 +1,13 @@
+# Credenciais e configuracoes locais
+config.json
+*.env
+*.secret
+
+# Saidas e registros locais
+logs/
+*.log
+
+# Arquivos do PowerShell e do sistema
+*.clixml
+Thumbs.db
+Desktop.ini
