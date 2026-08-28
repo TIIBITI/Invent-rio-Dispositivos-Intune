@@ -17,8 +17,8 @@ $dashboardConfigDir = Join-Path $env:LOCALAPPDATA 'IntuneDashboard'
 $configPath = Join-Path $dashboardConfigDir 'config.json'
 
 Write-Host 'Configuracao do Dashboard de Inventario Intune' -ForegroundColor Cyan
-Write-Host 'Informe a URL do SITE do SharePoint, sem o trecho /Lists/...'
-Write-Host 'Exemplo: https://empresa.sharepoint.com/sites/TI'
+Write-Host 'Informe a URL do SITE do SharePoint'
+Write-Host 'https://empresa.sharepoint.com/sites/TI'
 
 $config = [ordered]@{
     TenantId       = Read-RequiredValue 'ID do diretorio (locatario)'
@@ -29,7 +29,7 @@ $config = [ordered]@{
 
 $secureSecret = Read-Host 'VALOR do segredo do aplicativo' -AsSecureString
 if ($null -eq $secureSecret) {
-    throw 'Nenhum segredo foi informado.'
+    throw 
 }
 
 # ConvertFrom-SecureString protege o valor usando DPAPI. Apenas este usuario,
