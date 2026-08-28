@@ -164,22 +164,3 @@ Atualize a Lista do SharePoint e confira se os equipamentos e seus campos foram 
 
 > O computador deve estar ligado e o usuário deve estar conectado às 08:00. Para maior disponibilidade, migre futuramente a rotina para uma VM ou servidor gerenciado.
 
-## 8. Versionar no GitHub com segurança
-
-Antes de enviar o projeto, confirme que o arquivo `%LOCALAPPDATA%\IntuneDashboard\config.json` permanece fora da pasta do repositório. O `.gitignore` também protege nomes comuns de arquivos de configuração e segredos.
-
-Com o Git configurado, os comandos básicos são:
-
-```powershell
-git add .gitignore Configure-IntuneDashboard.ps1 Sync-IntuneDashboard.ps1 README.md
-git commit -m "feat: add Intune inventory synchronization"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
-git push -u origin main
-```
-
-Recomenda-se criar o repositório GitHub como **privado**, pois os scripts manipulam dados internos de inventário, mesmo sem armazenar credenciais.
-
-## Próximos passos
-
-Com a lista sendo atualizada diariamente, ela pode ser conectada ao Power BI Desktop para criar indicadores por marca, modelo, conformidade, sistema operacional, usuário e última sincronização.
