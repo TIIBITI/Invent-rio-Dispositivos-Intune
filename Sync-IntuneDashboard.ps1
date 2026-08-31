@@ -57,7 +57,7 @@ function Invoke-GraphRequest {
 
     $params = @{ Method = $Method; Uri = $Uri; Headers = $Headers }
     if ($null -ne $Body) {
-        # Envia JSON explicitamente em UTF-8 para preservar nomes com acentos.
+        
         $jsonBody = $Body | ConvertTo-Json -Depth 8
         $params.Body = [System.Text.Encoding]::UTF8.GetBytes($jsonBody)
         $params.ContentType = 'application/json; charset=utf-8'
@@ -75,7 +75,7 @@ function Invoke-GraphRequest {
                 $reader.Dispose()
             }
             catch {
-                # Mantem a mensagem padrao caso o corpo da resposta nao possa ser lido.
+                
             }
         }
         if ([string]::IsNullOrWhiteSpace($graphDetail)) {
@@ -152,8 +152,7 @@ $headers = @{ Authorization = "Bearer $accessToken" }
 $siteUri = [Uri]$config.SharePointSite
 $sitePath = $siteUri.AbsolutePath.Trim('/')
 
-# Aceita tambem uma URL copiada diretamente da lista, por exemplo
-# https://empresa.sharepoint.com/sites/TI/Lists/Inventario/AllItems.aspx.
+
 if ($sitePath -match '^(.*?)/Lists(?:/|$)') {
     $sitePath = $matches[1]
 }
@@ -177,7 +176,7 @@ if (-not [string]::IsNullOrWhiteSpace($config.ListUrl)) {
     } | Select-Object -First 1
 }
 else {
-    # Compatibilidade com configuracoes criadas antes da inclusao de ListUrl.
+    
     $list = $availableLists | Where-Object { $_.displayName -eq $config.ListName } | Select-Object -First 1
 }
 if ($null -eq $list) {
@@ -189,10 +188,7 @@ $deviceFields = 'id,deviceName,manufacturer,model,serialNumber,userDisplayName,u
 $devicesUri = "https://graph.microsoft.com/v1.0/deviceManagement/managedDevices?`$select=$deviceFields&`$top=100"
 $devices = Get-AllGraphPages -Uri $devicesUri -Headers $headers
 
-# Alguns campos de hardware não são retornados na listagem. O Graph exige uma
-# consulta detalhada por equipamento para apresentar RAM, MAC Ethernet e outros
-# dados de inventário. Com um parque de porte normal, as chamadas sequenciais
-# evitam atingir o limite de requisições da API.
+
 $detailedDeviceFields = 'totalStorageSpaceInBytes,freeStorageSpaceInBytes,physicalMemoryInBytes,isEncrypted,wiFiMacAddress,ethernetMacAddress,partnerReportedThreatState,managementState,enrolledDateTime,complianceGracePeriodExpirationDateTime,jailBroken'
 
 $itemsUri = "https://graph.microsoft.com/v1.0/sites/$($site.id)/lists/$($list.id)/items?`$expand=fields&`$top=100"
@@ -269,9 +265,7 @@ foreach ($device in $devices) {
         Set-SharePointField -Fields $fields -ColumnNames $columnNames -DisplayName $field.Key -Value $field.Value
     }
 
-    # ipAddressV4 é um campo beta que o Intune frequentemente retorna vazio.
-    # Mantemos o campo sem sobrescrever valores existentes até que o serviço o
-    # disponibilize de modo confiável no Graph.
+    
     if (-not [string]::IsNullOrWhiteSpace($details.ipAddressV4)) {
         Set-SharePointField -Fields $fields -ColumnNames $columnNames -DisplayName 'IPV4' -Value $details.ipAddressV4
     }
